@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-import { Logger } from 'winston';
-import { Octokit } from '@octokit/rest';
-import { Gitlab } from '@gitbeaker/node';
-import { getPersonalAccessTokenHandler, WebApi } from 'azure-devops-node-api';
-import { Config } from '@backstage/config';
 import { TemplateEntityV1alpha1 } from '@backstage/catalog-model';
+import { Config } from '@backstage/config';
+import { Gitlab } from '@gitbeaker/node';
+import { Octokit } from '@octokit/rest';
+import { getPersonalAccessTokenHandler, WebApi } from 'azure-devops-node-api';
+import { Logger } from 'winston';
 import {
   DeprecatedLocationTypeDetector,
   makeDeprecatedLocationTypeDetector,
   parseLocationAnnotation,
 } from '../helpers';
-import { PublisherBase, PublisherBuilder } from './types';
 import { RemoteProtocol } from '../types';
-import { GithubPublisher, RepoVisibilityOptions } from './github';
-import { GitlabPublisher } from './gitlab';
 import { AzurePublisher } from './azure';
 import { BitbucketPublisher } from './bitbucket';
+import { GithubPublisher } from './github';
+import { GitlabPublisher } from './gitlab';
+import { PublisherBase, PublisherBuilder } from './types';
 
 export class Publishers implements PublisherBuilder {
   private publisherMap = new Map<RemoteProtocol, PublisherBase>();
@@ -80,13 +80,11 @@ export class Publishers implements PublisherBuilder {
     const githubConfig = config.getOptionalConfig('scaffolder.github');
     if (githubConfig) {
       try {
-        const repoVisibility = githubConfig.getString(
-          'visibility',
-        ) as RepoVisibilityOptions;
-
+        const repoVisibility = githubConfig.getString('visibility');
         const githubToken = githubConfig.getString('token');
         const githubHost =
           githubConfig.getOptionalString('host') ?? 'https://api.github.com';
+
         const githubClient = new Octokit({
           auth: githubToken,
           baseUrl: githubHost,
@@ -94,7 +92,7 @@ export class Publishers implements PublisherBuilder {
         const githubPublisher = new GithubPublisher({
           client: githubClient,
           token: githubToken,
-          repoVisibility,
+          repoVisibility: repoVisibility as any,
         });
 
         publishers.register('file', githubPublisher);
