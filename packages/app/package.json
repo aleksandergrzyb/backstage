@@ -8,6 +8,7 @@
     "@backstage/cli": "^0.4.5",
     "@backstage/core": "^0.4.2",
     "@backstage/plugin-api-docs": "^0.4.1",
+    "@backstage/plugin-apple-developer-portal": "^0.1.1",
     "@backstage/plugin-catalog": "^0.2.10",
     "@backstage/plugin-catalog-import": "^0.3.3",
     "@backstage/plugin-circleci": "^0.2.5",

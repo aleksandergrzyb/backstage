@@ -78,6 +78,9 @@ techdocs:
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
+appledeveloperportal:
+  baseUrl: http://localhost:5000/
+
 sentry:
   organization: my-company
 
