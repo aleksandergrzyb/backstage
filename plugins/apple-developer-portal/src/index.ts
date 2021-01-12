@@ -13,4 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { default } from './components/MembershipPage';
+export { plugin } from './plugin';
