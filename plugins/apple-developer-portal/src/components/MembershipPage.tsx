@@ -27,8 +27,15 @@ import {
   Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { InfoCard, Header, Page, Content } from '@backstage/core';
-import requestAppleProgramInvitation from './AppleDeveloperPortalAPI';
+import {
+  InfoCard,
+  Header,
+  Page,
+  Content,
+  configApiRef,
+  useApi,
+} from '@backstage/core';
+import { requestAppleProgramInvitation } from './AppleDeveloperPortalAPI';
 
 const useStyles = makeStyles<BackstageTheme>(theme => ({
   form: {
@@ -45,6 +52,7 @@ const useStyles = makeStyles<BackstageTheme>(theme => ({
 }));
 
 export default function MembershipPage() {
+  const configApi = useApi(configApiRef);
   const classes = useStyles();
   const { register, handleSubmit, errors, formState } = useForm();
   const hasErrors = !!errors.firstName || !!errors.lastName || !!errors.email;
@@ -60,6 +68,7 @@ export default function MembershipPage() {
   };
   const onSubmit = handleSubmit(data => {
     requestAppleProgramInvitation(
+      configApi.getString('appledeveloperportal.baseUrl'),
       data.firstName,
       data.lastName,
       data.email,
@@ -70,7 +79,7 @@ export default function MembershipPage() {
 
   return (
     <Page themeId="tool">
-      <Header title="Apple Developer Portal"></Header>
+      <Header title="Apple Developer Portal" />
       <Content>
         <Grid container spacing={3} direction="column">
           <Grid item>
@@ -93,7 +102,7 @@ export default function MembershipPage() {
                     })}
                   />
                   {errors.firstName && (
-                    <FormHelperText error={true}>
+                    <FormHelperText error>
                       First name is required
                     </FormHelperText>
                   )}
@@ -110,9 +119,7 @@ export default function MembershipPage() {
                     })}
                   />
                   {errors.lastName && (
-                    <FormHelperText error={true}>
-                      Last name is required
-                    </FormHelperText>
+                    <FormHelperText error>Last name is required</FormHelperText>
                   )}
 
                   <TextField
@@ -128,7 +135,7 @@ export default function MembershipPage() {
                     })}
                   />
                   {errors.email && (
-                    <FormHelperText error={true}>
+                    <FormHelperText error>
                       Correct email address is required
                     </FormHelperText>
                   )}
